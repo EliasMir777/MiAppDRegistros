@@ -1,0 +1,148 @@
+/* Variables (Esquema Claro/Amigable) */
+:root {
+    --bg-color: #f0f2f5; /* Fondo gris azulado muy claro (casi blanco) */
+    --accent-color: #008cff; /* Azul brillante, vibrante pero no agresivo */
+    --text-color: #1a1a2e;  /* Texto oscuro (gris oscuro o azul noche) */
+    --light-bg: #ffffff; 
+}
+
+/* ----------------------------------------------------------------- */
+/* 1. BASE DE PÁGINA Y CONTENEDOR */
+/* ----------------------------------------------------------------- */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    overflow: hidden; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.background-effect {
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    z-index: -1;
+    background: radial-gradient(circle at center, rgba(140, 200, 255, 0.2) 0%, rgba(240, 242, 245, 1) 70%);
+    animation: pulse-light 15s infinite alternate;
+}
+
+@keyframes pulse-light {
+    from { box-shadow: 0 0 50px rgba(0, 140, 255, 0.1); }
+    to { box-shadow: 0 0 80px rgba(0, 140, 255, 0.2); }
+}
+
+.gateway-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 600px; 
+}
+
+.central-title {
+    font-size: 2.5em;
+    letter-spacing: 0.2em;
+    color: var(--text-color); 
+    text-shadow: 0 0 5px rgba(0, 140, 255, 0.4); 
+    margin-bottom: 50px; 
+}
+
+/* ----------------------------------------------------------------- */
+/* 2. ESTILO DEL MENÚ APILADO (NUEVO) */
+/* ----------------------------------------------------------------- */
+
+/* Eliminado .menu-circle */
+/* Eliminado .menu-item */
+
+.menu-stacked {
+    width: 100%;
+    display: flex;
+    flex-direction: column; 
+    gap: 15px; 
+}
+
+.menu-link {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    
+    width: 100%;
+    padding: 15px 30px;
+    background: var(--light-bg); 
+    border: 1px solid rgba(0, 140, 255, 0.2); 
+    border-radius: 10px;
+    
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-color); 
+    
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.menu-link:hover {
+    background-color: var(--accent-color);
+    color: #ffffff;
+    transform: translateY(-3px); 
+    box-shadow: 0 8px 20px rgba(0, 140, 255, 0.3);
+}
+
+.menu-link i {
+    font-size: 1.8em;
+    margin-right: 15px;
+    transition: color 0.3s ease;
+}
+
+.menu-link:hover i {
+    color: #ffffff;
+}
+
+.menu-link span {
+    font-size: 1.1em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* ----------------------------------------------------------------- */
+/* 3. BLOQUE DE INFORMACIÓN INFERIOR */
+/* ----------------------------------------------------------------- */
+
+.info-block {
+    margin-top: 50px;
+    padding: 10px 20px;
+    border: 1px solid var(--accent-color);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.7); 
+    display: flex;
+    align-items: baseline;
+    font-family: monospace;
+    box-shadow: 0 0 10px rgba(0, 140, 255, 0.2);
+}
+
+.info-block .time {
+    font-size: 2em;
+    color: var(--accent-color); 
+    letter-spacing: 3px;
+    margin-right: 20px;
+}
+
+.info-block .details p {
+    margin: 2px 0;
+    font-size: 0.7em;
+    color: #556070; 
+}
+
+.info-block .details .small-text {
+    font-size: 0.6em;
+    color: #8894a4;
+}
