@@ -14,11 +14,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            /* CAMBIO CLAVE: Se eliminó el borde superior de la página (body) */
+            /* border-top: 8px solid #001f3f; */ 
         }
 
         h1 { color: #2d3748; margin-bottom: 10px; }
 
-        /* --- Contenedor del Formulario --- */
+        /* --- Contenedor del Formulario (Primera Hoja) --- */
         .container {
             background-color: white;
             padding: 30px;
@@ -27,8 +29,8 @@
             width: 100%;
             max-width: 850px;
             margin-bottom: 30px;
-            /* Borde superior del formulario */
-            border-top: 5px solid #28a745; 
+            /* Borde superior del formulario (contenedor) mantenido */
+            border-top: 5px solid #001f3f; 
         }
 
         .form-group { margin-bottom: 20px; }
@@ -67,9 +69,18 @@
             transition: all 0.2s;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
-        .btn-save { background-color: #28a745; width: 100%; margin-top: 10px; }
-        .btn-save:hover { background-color: #218838; transform: translateY(-1px); }
+/* Botón Guardar: Fondo y Borde superior AZUL MARINO */
+.btn-save { 
+    background-color: #003366; /* <= CAMBIA ESTE COLOR */
+    width: 100%; 
+    margin-top: 10px; 
+    border-top: 5px solid #003366; /* Si cambias el fondo, cambia este borde también */
+}
+/* Hover del botón Guardar con un tono más oscuro de AZUL MARINO */
+.btn-save:hover { 
+    background-color: #002244; /* <= CAMBIA ESTE COLOR POR UNO UN POCO MÁS OSCURO */
+    transform: translateY(-1px); 
+}
 
         .btn-export { background-color: #3182ce; }
         .btn-export:hover { background-color: #2b6cb0; }
@@ -96,7 +107,7 @@
         .btn-row-delete:hover { background-color: #c53030; }
 
 
-        /* --- Contenedor de la Tabla --- */
+        /* --- Contenedor de la Tabla (Segunda Hoja) --- */
         .table-section {
             width: 100%;
             max-width: 850px;
@@ -104,6 +115,8 @@
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            /* Borde superior de la sección de tabla mantenido */
+            border-top: 5px solid #001f3f; 
         }
 
         /* Titulo Principal de la Tabla */
@@ -141,7 +154,7 @@
             border-collapse: collapse;
             overflow: hidden;
             border-radius: 8px;
-            margin-bottom: 20px; 
+            margin-bottom: 20px; 
         }
 
         th, td {
@@ -150,12 +163,11 @@
             border-bottom: 1px solid #e2e8f0;
         }
 
-        /* CABECERA DE TABLA: COLOR AZUL OSCURO ELEGANTE */
         th {
-            background-color: #2c3e50; 
+            background-color: #4a5568;
             color: white;
             text-transform: uppercase;
-            font-size: 15px;
+            font-size: 12px;
             letter-spacing: 1px;
         }
         
@@ -208,7 +220,7 @@
 
         /* --- Ocultar la tabla de impresión por defecto en pantalla --- */
         #printNoteTable {
-            display: none; 
+            display: none; 
         }
 
         /* ======================================= */
@@ -216,7 +228,7 @@
         /* ======================================= */
         @media print {
             
-            /* 1. Ocultar elementos que no son la sección de tabla */
+            /* 1. Ocultar todos los elementos del body que no son la sección de tabla */
             body > *:not(.table-section) {
                 display: none !important;
             }
@@ -224,7 +236,7 @@
             /* 2. Mostrar la sección de la tabla y eliminar adornos */
             .table-section {
                 display: block !important; 
-                box-shadow: none; 
+                box-shadow: none; 
                 padding: 0;
                 margin: 0;
                 background-color: transparent;
@@ -232,14 +244,14 @@
                 width: 100%;
             }
 
-            /* Títulos - Ajuste fino de márgenes y tamaño */
+            /* Títulos - Reducir el margen en impresión */
             .table-title {
                 margin-bottom: 2px !important;
-                font-size: 18pt !important;
+                font-size: 20pt !important;
             }
 
             .table-subtitle {
-                margin-bottom: 10px !important;
+                margin-bottom: 15px !important;
                 padding-bottom: 5px !important;
                 font-size: 14pt !important;
             }
@@ -252,29 +264,28 @@
             /* 4. REGLA REFORZADA: OCULTAR COLUMNA DE ACCIONES */
             #tablaRegistros th:last-child, 
             #tablaRegistros td:last-child, 
-            #tablaRegistros td button    
+            #tablaRegistros td button  
             {
-                display: none !important; 
+                display: none !important; 
             }
 
             /* 5. Asegurar la impresión fiel de colores y estilos de las tablas */
             th {
-                -webkit-print-color-adjust: exact !important; 
+                -webkit-print-color-adjust: exact !important; 
                 print-color-adjust: exact !important;
-                color: white !important; 
-                background-color: #2c3e50 !important;
+                color: white !important; 
             }
             
-            /* **AJUSTE CLAVE:** Configuración de espaciado y fuente para la tabla (Compacto) */
+            /* **AJUSTE CLAVE:** Configuración de espaciado y fuente para la tabla */
             #tablaRegistros th {
                 font-size: 10pt !important; 
-                padding: 6px 10px !important; 
+                padding: 6px 10px !important; /* Menor espaciado vertical en el encabezado */
                 border: 1px solid #e2e8f0 !important;
             }
             #tablaRegistros td {
-                font-size: 12pt !important; 
-                border: 1px solid #e2e8f0 !important; 
-                padding: 8px 10px !important; 
+                font-size: 12pt !important; /* Tamaño de fuente estándar legible */
+                border: 1px solid #e2e8f0 !important; 
+                padding: 8px 10px !important; /* Espaciado ajustado */
             }
             
             /* Colores de fila en impresión */
@@ -286,17 +297,17 @@
             
             /* 6. Mostrar y estilizar la tabla de Nota Final ("TEXTO") */
              #printNoteTable {
-                display: table !important; 
-                margin-top: 10px !important; 
-                border: 1px solid #e2e8f0; 
+                display: table !important; 
+                margin-top: 10px !important; /* Mínimo margen superior */
+                border: 1px solid #e2e8f0; 
                 border-radius: 0;
                 width: 100%;
              }
              
              #printNoteTable th {
-                font-size: 12pt !important; 
+                font-size: 12pt !important; /* Tamaño de fuente de la etiqueta TEXTO */
                 border: 1px solid #e2e8f0 !important;
-                background-color: #2c3e50 !important; 
+                background-color: #4a5568 !important; 
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
                 padding: 5px 10px !important;
@@ -304,8 +315,8 @@
 
              #printNoteTable td {
                 padding: 10px !important; 
-                white-space: pre-wrap; 
-                font-size: 12pt !important; 
+                white-space: pre-wrap; 
+                font-size: 12pt !important; /* Tamaño de fuente de la nota final */
                 border: 1px solid #e2e8f0 !important;
                 vertical-align: top;
              }

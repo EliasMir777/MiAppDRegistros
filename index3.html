@@ -14,11 +14,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            /* CAMBIO CLAVE: Se eliminó el borde superior de la página (body) */
+            /* border-top: 8px solid #001f3f; */ 
         }
 
         h1 { color: #2d3748; margin-bottom: 10px; }
 
-        /* --- Contenedor del Formulario --- */
+        /* --- Contenedor del Formulario (Primera Hoja) --- */
         .container {
             background-color: white;
             padding: 30px;
@@ -27,7 +29,8 @@
             width: 100%;
             max-width: 850px;
             margin-bottom: 30px;
-            border-top: 5px solid #28a745;
+            /* Borde superior del formulario (contenedor) mantenido */
+            border-top: 5px solid #001f3f; 
         }
 
         .form-group { margin-bottom: 20px; }
@@ -95,7 +98,7 @@
         .btn-row-delete:hover { background-color: #c53030; }
 
 
-        /* --- Contenedor de la Tabla --- */
+        /* --- Contenedor de la Tabla (Segunda Hoja) --- */
         .table-section {
             width: 100%;
             max-width: 850px;
@@ -103,6 +106,8 @@
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            /* Borde superior de la sección de tabla mantenido */
+            border-top: 5px solid #001f3f; 
         }
 
         /* Titulo Principal de la Tabla */
@@ -140,7 +145,7 @@
             border-collapse: collapse;
             overflow: hidden;
             border-radius: 8px;
-            margin-bottom: 20px; 
+            margin-bottom: 20px; 
         }
 
         th, td {
@@ -206,7 +211,7 @@
 
         /* --- Ocultar la tabla de impresión por defecto en pantalla --- */
         #printNoteTable {
-            display: none; 
+            display: none; 
         }
 
         /* ======================================= */
@@ -222,7 +227,7 @@
             /* 2. Mostrar la sección de la tabla y eliminar adornos */
             .table-section {
                 display: block !important; 
-                box-shadow: none; 
+                box-shadow: none; 
                 padding: 0;
                 margin: 0;
                 background-color: transparent;
@@ -250,16 +255,16 @@
             /* 4. REGLA REFORZADA: OCULTAR COLUMNA DE ACCIONES */
             #tablaRegistros th:last-child, 
             #tablaRegistros td:last-child, 
-            #tablaRegistros td button    
+            #tablaRegistros td button  
             {
-                display: none !important; 
+                display: none !important; 
             }
 
             /* 5. Asegurar la impresión fiel de colores y estilos de las tablas */
             th {
-                -webkit-print-color-adjust: exact !important; 
+                -webkit-print-color-adjust: exact !important; 
                 print-color-adjust: exact !important;
-                color: white !important; 
+                color: white !important; 
             }
             
             /* **AJUSTE CLAVE:** Configuración de espaciado y fuente para la tabla */
@@ -270,7 +275,7 @@
             }
             #tablaRegistros td {
                 font-size: 12pt !important; /* Tamaño de fuente estándar legible */
-                border: 1px solid #e2e8f0 !important; 
+                border: 1px solid #e2e8f0 !important; 
                 padding: 8px 10px !important; /* Espaciado ajustado */
             }
             
@@ -283,9 +288,9 @@
             
             /* 6. Mostrar y estilizar la tabla de Nota Final ("TEXTO") */
              #printNoteTable {
-                display: table !important; 
+                display: table !important; 
                 margin-top: 10px !important; /* Mínimo margen superior */
-                border: 1px solid #e2e8f0; 
+                border: 1px solid #e2e8f0; 
                 border-radius: 0;
                 width: 100%;
              }
@@ -301,7 +306,7 @@
 
              #printNoteTable td {
                 padding: 10px !important; 
-                white-space: pre-wrap; 
+                white-space: pre-wrap; 
                 font-size: 12pt !important; /* Tamaño de fuente de la nota final */
                 border: 1px solid #e2e8f0 !important;
                 vertical-align: top;
@@ -369,7 +374,7 @@
                     <th>Acciones</th> </tr>
             </thead>
             <tbody>
-                </tbody>
+                     </tbody>
         </table>
         <p id="emptyMsg" class="empty-msg">No hay registros guardados actualmente.</p>
 
