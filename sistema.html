@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Sociedades</title>
+    <style>
+        /* --- Estilos Generales --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 { color: #2d3748; margin-bottom: 10px; }
+
+        /* --- Contenedor de Selección --- */
+        .selection-container {
+            background-color: #f7fafc;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 850px;
+            margin-bottom: 20px;
+            border-top: 5px solid #28a745; /* Color para la selección */
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .selection-container label {
+            font-weight: 700;
+            color: #4a5568;
+            font-size: 16px;
+        }
+        
+        .selection-container select {
+            padding: 10px 15px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        
+        .selection-container select:focus {
+            border-color: #28a745;
+            outline: none;
+        }
+
+        /* --- Contenedor del Formulario (Primera Hoja) --- */
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 850px;
+            margin-bottom: 30px;
+            /* El color del borde superior ahora es dinámico */
+            border-top: 5px solid #001f3f; 
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #28a745;
+            outline: none;
+        }
+
+        /* --- Botones --- */
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        /* Botón Guardar: Fondo y Borde superior (Dinámico) */
+        .btn-save { 
+            background-color: #003366; 
+            width: 100%; 
+            margin-top: 10px; 
+            border-top: 5px solid #003366; 
+        }
+
+        .btn-save:hover { 
+            background-color: #002244; 
+            transform: translateY(-1px); 
+        }
+
+        .btn-export { background-color: #3182ce; }
+        .btn-export:hover { background-color: #2b6cb0; }
+
+        .btn-print { background-color: #008080; } /* Nuevo color para Imprimir */
+        .btn-print:hover { background-color: #005f5f; }
+
+        .btn-delete { background-color: #e53e3e; }
+        .btn-delete:hover { background-color: #c53030; }
+
+        /* ESTILO: Botón de Edición/Eliminación en la tabla */
+        .btn-edit, .btn-row-delete {
+            background-color: #f6ad55; /* Naranja Suave */
+            color: #2d3748;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            box-shadow: none;
+            margin: 2px;
+        }
+        .btn-edit:hover { background-color: #dd6b20; color: white; }
+        
+        .btn-row-delete {
+            background-color: #e53e3e; 
+            color: white;
+        }
+        .btn-row-delete:hover { background-color: #c53030; }
+
+
+        /* --- Contenedor de la Tabla (Segunda Hoja) --- */
+        .table-section {
+            width: 100%;
+            max-width: 850px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            /* Borde superior de la sección de tabla (Dinámico) */
+            border-top: 5px solid #001f3f; 
+        }
+
+        /* Titulo Principal de la Tabla */
+        .table-title {
+            text-align: center;
+            color: #2d3748;
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-size: 24px;
+            padding-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Subtítulo Dinámico del Mes */
+        .table-subtitle {
+            text-align: center;
+            color: #4a5568;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 18px;
+            font-weight: 400;
+            border-bottom: 2px solid #edf2f7;
+            padding-bottom: 15px;
+        }
+
+        .actions-bar {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 20px; 
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            /* Alineación vertical */
+            vertical-align: top; 
+        }
+
+        th {
+            background-color: #4a5568;
+            color: white;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+        
+        /* Filas Impares (Alternando color) */
+        #tablaRegistros tr:nth-child(odd) {
+            background-color: #D3E7F8; 
+        }
+
+        /* Columna de acciones (en pantalla) */
+        #tablaRegistros th:last-child, #tablaRegistros td:last-child {
+             text-align: center;
+             width: 80px;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background-color: #f7fafc; }
+        
+        .empty-msg {
+            text-align: center;
+            color: #a0aec0;
+            margin-top: 30px;
+            font-style: italic;
+        }
+
+        /* --- Estilos para la Nota de Impresión (Entrada de texto en pantalla) --- */
+        .print-note-container {
+            width: 100%;
+            margin-top: 15px;
+            padding: 15px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            background-color: #f7fafc;
+        }
+
+        .print-note-container label {
+            font-size: 14px;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        #notaParaImprimir {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            border: 1px solid #a0aec0;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        /* --- Ocultar la tabla de impresión por defecto en pantalla --- */
+        #printNoteTable {
+            display: none; 
+        }
+        
+        /* ======================================= */
+        /* --- REGLAS EXCLUSIVAS PARA IMPRESIÓN --- */
+        /* ======================================= */
+        @media print {
+            
+            /* 1. Ocultar todos los elementos del body que no son la sección de tabla */
+            body > *:not(.table-section) {
+                display: none !important;
+            }
+
+            /* 2. Mostrar la sección de la tabla y eliminar adornos */
+            .table-section {
+                display: block !important; 
+                box-shadow: none; 
+                padding: 0;
+                margin: 0;
+                background-color: transparent;
+                max-width: 100%;
+                width: 100%;
+                border-top: none !important; /* Quitar borde en impresión */
+            }
+
+            /* Títulos - Reducir el margen en impresión */
+            .table-title {
+                margin-bottom: 2px !important;
+                font-size: 20pt !important;
+            }
+
+            .table-subtitle {
+                margin-bottom: 15px !important;
+                padding-bottom: 5px !important;
+                font-size: 14pt !important;
+            }
+            
+            /* 3. Ocultar elementos dentro de table-section que no se imprimen */
+            .actions-bar, .print-note-container, #emptyMsg {
+                display: none !important;
+            }
+            
+            /* 4. REGLA REFORZADA: OCULTAR COLUMNA DE ACCIONES */
+            #tablaRegistros th:last-child, 
+            #tablaRegistros td:last-child, 
+            #tablaRegistros td button  
+            {
+                display: none !important; 
+            }
+
+            /* 5. Asegurar la impresión fiel de colores y estilos de las tablas */
+            th {
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important;
+                color: white !important; 
+            }
+            
+            /* **AJUSTE CLAVE:** Configuración de espaciado y fuente para la tabla */
+            #tablaRegistros th {
+                font-size: 10pt !important; 
+                padding: 6px 10px !important; /* Menor espaciado vertical en el encabezado */
+                border: 1px solid #e2e8f0 !important;
+            }
+            #tablaRegistros td {
+                font-size: 12pt !important; /* Tamaño de fuente estándar legible */
+                border: 1px solid #e2e8f0 !important; 
+                padding: 8px 10px !important; /* Espaciado ajustado */
+            }
+            
+            /* Colores de fila en impresión */
+            #tablaRegistros tr:nth-child(odd) {
+                background-color: #D3E7F8 !important; 
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            /* 6. Mostrar y estilizar la tabla de Nota Final ("TEXTO") */
+             #printNoteTable {
+                display: table !important; 
+                margin-top: 10px !important; /* Mínimo margen superior */
+                border: 1px solid #e2e8f0; 
+                border-radius: 0;
+                width: 100%;
+             }
+             
+             #printNoteTable th {
+                font-size: 12pt !important; /* Tamaño de fuente de la etiqueta TEXTO */
+                border: 1px solid #e2e8f0 !important;
+                background-color: #4a5568 !important; 
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                padding: 5px 10px !important;
+             }
+
+             #printNoteTable td {
+                padding: 10px !important; 
+                white-space: pre-wrap; 
+                font-size: 12pt !important; /* Tamaño de fuente de la nota final */
+                border: 1px solid #e2e8f0 !important;
+                vertical-align: top;
+             }
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="mainTitle">Sistema de Sociedades</h1>
+
+    <div class="selection-container">
+        <label for="societySelector">Seleccionar Sociedad:</label>
+        <select id="societySelector" onchange="changeSociety(this.value)">
+            <option value="Promocion Espiritual">Promoción Espiritual</option>
+            <option value="Damas">Sociedad de Damas</option>
+            <option value="Jovenes">Sociedad de Jóvenes</option>
+        </select>
+    </div>
+
+    <div class="container" id="formContainer">
+        <form id="registroForm">
+            <input type="hidden" id="editIndex">
+
+            <div class="form-group">
+                <label for="fecha">Fecha:</label>
+                <input type="date" id="fecha" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="principio">Principio:</label>
+                <input type="text" id="principio" placeholder="Ej. Responsabilidad:Himnos" required>
+            </div>
+
+            <div class="form-group">
+                <label for="direccion">Dirección:</label>
+                <input type="text" id="direccion" placeholder="Ej. Responsabilidad:Coros" required>
+            </div>
+            
+            <div class="form-group" id="activityField" style="display: none;">
+                <label for="actividad">Actividad:</label>
+                <input type="text" id="actividad" placeholder="Ej. Culto de Oración / Recreación">
+            </div>
+
+            <div class="form-group">
+                <label for="mensaje">Mensaje:</label>
+                <textarea id="mensaje" rows="3" placeholder="Mensaje..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn-save" id="saveButton">💾 Guardar Registro</button>
+        </form>
+    </div>
+
+    <div class="table-section" id="tableSection">
+        
+        <h2 id="tableTitle" class="table-title">Departamento de Promoción Espiritual</h2>
+        
+        <h3 id="monthSubtitle" class="table-subtitle"></h3>
+
+        <div class="actions-bar">
+            <button onclick="exportarExcel()" class="btn-export">📊 Exportar Excel</button>
+            <button onclick="borrarTodo()" class="btn-delete">🗑️ Borrar Todo</button>
+            <button onclick="window.print()" class="btn-print">🖨️ Imprimir</button>
+        </div>
+
+        <table id="tablaRegistros">
+            <thead>
+                <tr id="tableHeaders">
+                    </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+        <p id="emptyMsg" class="empty-msg">No hay registros guardados actualmente.</p>
+
+        <div class="print-note-container">
+            <label for="notaParaImprimir">Notas Finales o Comentarios:</label>
+            <textarea id="notaParaImprimir" rows="4" placeholder="Escribe aquí las observaciones o resumen final. Se guarda automáticamente."></textarea>
+        </div>
+        
+        <table id="printNoteTable">
+            <thead>
+                <tr>
+                    <th colspan="1">TEXTO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="noteRow">
+                    <td id="noteCell"></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <script>
+        // --- 1. CONFIGURACIÓN DINÁMICA DE CLAVES ---
+        let CURRENT_SOCIETY = 'Promocion Espiritual'; 
+        let REGISTROS_KEY;
+        let NOTA_KEY;
+        let COLOR_PRINCIPAL = '#001f3f'; // Azul Marino (por defecto)
+
+        // Definición de colores y claves por sociedad
+        const SOCIETY_CONFIG = {
+            'Promocion Espiritual': { 
+                key: 'registros_Promocion', 
+                noteKey: 'nota_Promocion', 
+                color: '#001f3f', 
+                title: 'Departamento de Promoción Espiritual',
+                hasActivity: false,
+                headers: ["Fecha", "Principio", "Dirección", "Mensaje", "Acciones"]
+            }, 
+            'Damas': { 
+                key: 'registros_Damas', 
+                noteKey: 'nota_Damas', 
+                color: '#8A2BE2', 
+                title: 'Sociedad de Damas',
+                hasActivity: true,
+                headers: ["Fecha", "Principio", "Dirección", "Actividad", "Mensaje", "Acciones"]
+            }, 
+            'Jovenes': { 
+                key: 'registros_Jovenes', 
+                noteKey: 'nota_Jovenes', 
+                color: '#28a745', 
+                title: 'Sociedad de Jóvenes',
+                hasActivity: true,
+                headers: ["Fecha", "Principio", "Dirección", "Actividad", "Mensaje", "Acciones"]
+            } 
+        };
+
+        // --- 2. Inicialización y Referencias ---
+        const form = document.getElementById('registroForm');
+        const tableBody = document.querySelector('#tablaRegistros tbody');
+        const emptyMsg = document.getElementById('emptyMsg');
+        const notaField = document.getElementById('notaParaImprimir'); 
+        const noteCell = document.getElementById('noteCell'); 
+        const editIndexField = document.getElementById('editIndex'); 
+        const saveButton = document.getElementById('saveButton');
+        const mainTitle = document.getElementById('mainTitle');
+        const tableTitle = document.getElementById('tableTitle');
+        const formContainer = document.getElementById('formContainer');
+        const tableSection = document.getElementById('tableSection');
+        const activityField = document.getElementById('activityField');
+        const tableHeadersRow = document.getElementById('tableHeaders');
+        const actividadInput = document.getElementById('actividad');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const lastSociety = localStorage.getItem('last_society') || 'Promocion Espiritual';
+            document.getElementById('societySelector').value = lastSociety;
+            changeSociety(lastSociety);
+            setMonthSubtitle(); 
+        });
+
+        // Función CLAVE: Cambia la Sociedad Activa
+        function changeSociety(newSociety) {
+            CURRENT_SOCIETY = newSociety;
+            localStorage.setItem('last_society', newSociety);
+            
+            // 1. Obtener Configuración
+            const config = SOCIETY_CONFIG[newSociety];
+            REGISTROS_KEY = config.key;
+            NOTA_KEY = config.noteKey;
+            COLOR_PRINCIPAL = config.color;
+
+            // 2. Manejar Campo Actividad en el Formulario
+            activityField.style.display = config.hasActivity ? 'block' : 'none';
+            actividadInput.required = config.hasActivity;
+            
+            // 3. Aplicar Estilos y Títulos
+            mainTitle.textContent = `Sistema de ${config.title}`;
+            tableTitle.textContent = config.title;
+            
+            formContainer.style.borderTop = `5px solid ${COLOR_PRINCIPAL}`;
+            tableSection.style.borderTop = `5px solid ${COLOR_PRINCIPAL}`;
+            saveButton.style.backgroundColor = COLOR_PRINCIPAL;
+            saveButton.style.borderTop = `5px solid ${COLOR_PRINCIPAL}`;
+            
+            // 4. Actualizar Encabezados de la Tabla
+            tableHeadersRow.innerHTML = '';
+            config.headers.forEach(headerText => {
+                const th = document.createElement('th');
+                th.textContent = headerText;
+                tableHeadersRow.appendChild(th);
+            });
+
+            // 5. Actualizar Contenido
+            tableBody.innerHTML = '';
+            cargarDatos(); 
+            cargarNotaFinal();
+            
+            // 6. Resetear el formulario de edición
+            resetFormAndButton();
+        }
+
+        function resetFormAndButton() {
+            form.reset();
+            editIndexField.value = "";
+            saveButton.textContent = '💾 Guardar Registro';
+        }
+
+        // Inyecta la nota guardada en la celda oculta antes de imprimir
+        window.onbeforeprint = () => {
+             const notaGuardada = localStorage.getItem(NOTA_KEY);
+             noteCell.textContent = notaGuardada || 'No se ingresaron notas finales.';
+        };
+
+
+        // --- 3. Lógica de Guardar/Editar ---
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const config = SOCIETY_CONFIG[CURRENT_SOCIETY];
+
+            const nuevoRegistro = {
+                fecha: document.getElementById('fecha').value,
+                principio: document.getElementById('principio').value,
+                direccion: document.getElementById('direccion').value,
+                mensaje: document.getElementById('mensaje').value
+            };
+            
+            if (config.hasActivity) {
+                // Si la sociedad tiene actividad, se añade el campo y se valida
+                const actividadValue = actividadInput.value;
+                if (!actividadValue) {
+                    alert("El campo Actividad es obligatorio para esta sociedad.");
+                    return;
+                }
+                nuevoRegistro.actividad = actividadValue;
+            }
+
+            if (editIndexField.value !== "") {
+                const index = parseInt(editIndexField.value);
+                editarEnLocalStorage(nuevoRegistro, index);
+                resetFormAndButton();
+            } else {
+                guardarEnLocalStorage(nuevoRegistro);
+                resetFormAndButton();
+            }
+            
+            tableBody.innerHTML = '';
+            cargarDatos(); 
+            form.reset();
+        });
+
+        // --- 4. Lógica de Edición y Eliminación ---
+        
+        function cargarRegistroParaEdicion(index) {
+            const registros = obtenerRegistrosGuardados();
+            const registro = registros[index];
+            const config = SOCIETY_CONFIG[CURRENT_SOCIETY];
+            
+            document.getElementById('fecha').value = registro.fecha;
+            document.getElementById('principio').value = registro.principio;
+            document.getElementById('direccion').value = registro.direccion;
+            document.getElementById('mensaje').value = registro.mensaje;
+            
+            if (config.hasActivity) {
+                actividadInput.value = registro.actividad || '';
+            }
+            
+            editIndexField.value = index;
+            saveButton.textContent = '✏️ Actualizar Registro';
+
+            window.scrollTo(0, 0);
+        }
+
+        function editarEnLocalStorage(registroActualizado, index) {
+            let registros = obtenerRegistrosGuardados();
+            registros[index] = registroActualizado;
+            localStorage.setItem(REGISTROS_KEY, JSON.stringify(registros));
+        }
+
+        function eliminarRegistro(index) {
+            const title = SOCIETY_CONFIG[CURRENT_SOCIETY].title;
+            const confirmacion = confirm(`¿Estás seguro de eliminar este registro de la ${title}?`);
+            
+            if (confirmacion) {
+                let registros = obtenerRegistrosGuardados();
+                registros.splice(index, 1); 
+                localStorage.setItem(REGISTROS_KEY, JSON.stringify(registros));
+                
+                tableBody.innerHTML = '';
+                cargarDatos();
+            }
+        }
+
+
+        // --- 5. Funciones de LocalStorage y Visualización ---
+
+        function guardarEnLocalStorage(registro) {
+            let registros = obtenerRegistrosGuardados();
+            registros.push(registro);
+            localStorage.setItem(REGISTROS_KEY, JSON.stringify(registros));
+        }
+
+        function obtenerRegistrosGuardados() {
+            let registros;
+            const data = localStorage.getItem(REGISTROS_KEY);
+            if(data === null) {
+                registros = [];
+            } else {
+                registros = JSON.parse(data);
+            }
+            return registros;
+        }
+
+        function cargarDatos() {
+            const registros = obtenerRegistrosGuardados();
+            if(registros.length > 0) {
+                emptyMsg.style.display = 'none';
+                registros.forEach((registro, index) => agregarFila(registro, index));
+            } else {
+                emptyMsg.style.display = 'block';
+            }
+        }
+
+        function agregarFila(registro, index) {
+            emptyMsg.style.display = 'none';
+            const row = document.createElement('tr');
+            const config = SOCIETY_CONFIG[CURRENT_SOCIETY];
+            
+            let html = `
+                <td>${registro.fecha}</td>
+                <td>${registro.principio}</td>
+                <td>${registro.direccion}</td>
+            `;
+
+            if (config.hasActivity) {
+                // Si tiene Actividad, insertamos la celda de Actividad
+                html += `<td>${registro.actividad || ''}</td>`;
+            }
+
+            html += `
+                <td>${registro.mensaje}</td>
+                <td>
+                    <button class="btn-edit" onclick="cargarRegistroParaEdicion(${index})">
+                        -Editar-
+                    </button>
+                    <button class="btn-row-delete" onclick="eliminarRegistro(${index})">
+                        Eliminar
+                    </button>
+                </td>
+            `;
+            
+            row.innerHTML = html;
+            tableBody.appendChild(row);
+        }
+
+        // --- 6. Funciones de Nota Final y Pre-impresión ---
+        
+        notaField.addEventListener('input', () => {
+            localStorage.setItem(NOTA_KEY, notaField.value);
+        });
+
+        function cargarNotaFinal() {
+            const notaGuardada = localStorage.getItem(NOTA_KEY);
+            if (notaGuardada) {
+                notaField.value = notaGuardada;
+            } else {
+                notaField.value = ''; // Limpiar si no hay nota guardada para la nueva sociedad
+            }
+        }
+        
+        // --- 7. Otras funciones ---
+
+        function setMonthSubtitle() {
+            const subtitleElement = document.getElementById('monthSubtitle');
+            const now = new Date();
+            const options = { month: 'long', year: 'numeric' };
+            const formattedDate = now.toLocaleDateString('es-ES', options);
+            const capitalizedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+            subtitleElement.textContent = `Mes de ${capitalizedDate}`;
+        }
+
+        function exportarExcel() {
+            const registros = obtenerRegistrosGuardados();
+            const config = SOCIETY_CONFIG[CURRENT_SOCIETY];
+            
+            if(registros.length === 0) {
+                alert("No hay datos para exportar.");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            
+            // Encabezado CSV dinámico
+            let header = ["Fecha", "Principio", "Direccion"];
+            if (config.hasActivity) {
+                header.push("Actividad");
+            }
+            header.push("Mensaje");
+            csvContent += header.join(",") + "\n";
+
+            registros.forEach(function(row) {
+                const cleanString = (str) => `"${String(str).replace(/"/g, '""')}"`;
+
+                let fila = [
+                    cleanString(row.fecha),
+                    cleanString(row.principio),
+                    cleanString(row.direccion)
+                ];
+                
+                if (config.hasActivity) {
+                    fila.push(cleanString(row.actividad || ''));
+                }
+                
+                fila.push(cleanString(row.mensaje));
+                
+                csvContent += fila.join(",") + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Registro_${CURRENT_SOCIETY}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function borrarTodo() {
+            const title = SOCIETY_CONFIG[CURRENT_SOCIETY].title;
+            const confirmacion = confirm(`¿Estás seguro de eliminar TODOS los registros de la ${title}? Esta acción también borrará las notas finales guardadas de esta sociedad.`);
+            
+            if (confirmacion) {
+                localStorage.removeItem(REGISTROS_KEY); 
+                tableBody.innerHTML = ''; 
+                emptyMsg.style.display = 'block'; 
+
+                localStorage.removeItem(NOTA_KEY); 
+                notaField.value = '';
+                noteCell.textContent = '';
+                
+                resetFormAndButton();
+            }
+        }
+        
+        // Exponer funciones al ámbito global (importante para los onclick en HTML)
+        window.changeSociety = changeSociety;
+        window.cargarRegistroParaEdicion = cargarRegistroParaEdicion;
+        window.eliminarRegistro = eliminarRegistro;
+        window.exportarExcel = exportarExcel;
+        window.borrarTodo = borrarTodo;
+    </script>
+</body>
+</html>
