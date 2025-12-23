@@ -3,30 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal de Programas - Portal Central</title>
+    <title>Sistema de programs de la iglesia</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-
-    <div class="background-effect"></div>
+    <div class="aurora-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
 
     <div class="gateway-container">
-        
-        <h1 class="central-title">App Programas</h1>
+        <header class="main-header">
+            <div class="brand">
+                <i class="fas fa-layer-group"></i>
+                <span>🏤IGLESIA KEDUSHA-ADONAI🕎</span>
+            </div>
+            <h1 class="title">Sistema de Programas:</h1>
+        </header>
 
         <div class="menu-stacked" id="menuStacked">
             </div>
 
-        <div class="info-block">
-            <div class="time" id="currentTime">00:00:00</div>
-            <div class="details">
-                <p id="currentDate">D:2025.12.08</p>
-                <p>IP: 192.168.1.1 | Freq: 0.32.992 GHz</p>
-                <p class="small-text">BETA-ID: TG320-X8</p>
+        <footer class="info-footer">
+            <div class="time-wrap">
+                <span id="currentTime">00:00:00</span>
             </div>
-        </div>
-
+            <div class="meta-wrap">
+                <p class="status-badge"><span class="pulse-dot"></span>Menu del Sistema</p>
+            </div>
+        </footer>
     </div>
 
     <script src="script.js"></script>
