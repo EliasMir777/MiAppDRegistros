@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Kedusha-Adonai | Menú</title>
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+
+    <meta property="og:title" content="Sistema Iglesia Kedusha-Adonai">
+    <meta property="og:description" content="Panel de administración eclesiástica.">
+    <meta property="og:image" content="favicon.png">
+    <meta name="theme-color" content="#001F3F">
+
+    <style>
+        :root {
+            --primary: #001F3F;    /* Azul Oscuro */
+            --damas-varones: #2c3e50; /* Gris Elegante */
+            --success: #28a745;    /* Verde Jóvenes */
+            --spiritual: #805ad5;  /* Morado Promoción */
+            --bg: #eef2f5;
+            --text: #2d3748;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Encabezado */
+        header {
+            background-color: var(--primary);
+            width: 100%;
+            padding: 40px 0;
+            color: white;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border-bottom: 5px solid #d4af37; /* Toque dorado */
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 1px;
+            padding: 0 15px;
+        }
+
+        header p {
+            margin: 10px 0 0;
+            opacity: 0.9;
+            font-size: 18px;
+        }
+
+        /* Contenedor de Tarjetas */
+        .container {
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1000px;
+            box-sizing: border-box;
+        }
+
+        /* Estilo de las Tarjetas (Botones) */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+
+        .card i {
+            font-size: 60px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .card h2 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #718096;
+            margin-top: 10px;
+        }
+
+        /* Bordes de color para identificar cada área */
+        .damas-varones-border { border-top: 8px solid var(--damas-varones); }
+        .jovenes-border { border-top: 8px solid var(--success); }
+        .espiritual-border { border-top: 8px solid var(--spiritual); }
+
+        /* Pie de página */
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            color: #a0aec0;
+            font-size: 14px;
+        }
+
+        /* Ajuste para pantallas pequeñas */
+        @media (max-width: 600px) {
+            header h1 { font-size: 22px; }
+            .container { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🏤 Iglesia Kedusha-Adonai 🕎</h1>
+        <p>Panel de Control Administrativo</p>
+    </header>
+
+    <div class="container">
+        <a href="damasyvarones.html" class="card damas-varones-border">
+            <i>👥</i>
+            <h2>Sociedad de Damas/Varones</h2>
+            <p>Registro de asistencia y control de actividades generales.</p>
+        </a>
+
+        <a href="jovenes.html" class="card jovenes-border">
+            <i>👦</i>
+            <h2>Sociedad de Jóvenes</h2>
+            <p>Actividades, mensajes y principios semanales para la juventud.</p>
+        </a>
+
+        <a href="promocion.html" class="card espiritual-border">
+            <i>📖</i>
+            <h2>Promoción Espiritual</h2>
+            <p>Seguimiento de metas, lectura bíblica y crecimiento espiritual.</p>
+        </a>
+    </div>
+
+    <footer>
+        &copy; 2024 Iglesia Kedusha-Adonai - Gestión Interna
+    </footer>
+
+</body>
+</html>
