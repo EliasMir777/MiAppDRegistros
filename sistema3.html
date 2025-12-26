@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo Profesional - Sistema Completo</title>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --deep-blue: #0f172a;      /* Azul Oscuro UI */
+            --row-odd-ui: #1e293b;     /* Filas Tabla UI */
+            --accent-cyan: #38bdf8;    /* Cyan de contraste */
+            --form-bg: #1a2a44;        /* NUEVO COLOR: Azul Navy Formulario */
+        }
+
+        /* --- ESTILOS DE PANTALLA --- */
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+            background-attachment: fixed;
+            margin: 0; padding: 40px 20px;
+        }
+
+        .container { 
+            max-width: 1100px; margin: auto; background: rgba(255, 255, 255, 0.98); 
+            padding: 40px; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        h1, h2 { text-align: center; color: var(--deep-blue); }
+        h3#subtituloMes { text-align: center; color: #64748b; font-weight: 300; margin-bottom: 30px; }
+
+        /* --- CAMBIO: FONDO DEL FORMULARIO --- */
+        .no-print { 
+            background: var(--form-bg); /* Azul Navy Oscuro */
+            padding: 30px; 
+            border-radius: 20px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            margin-bottom: 40px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Texto de títulos dentro del formulario */
+        .no-print h2 { color: var(--accent-cyan) !important; text-align: left; margin-top: 0; }
+
+        .modo-edicion { border: 2px solid var(--accent-cyan); background: #1e3a5f; }
+
+        .form-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        
+        /* Estilo de los Inputs dentro del formulario oscuro */
+        input, textarea { 
+            padding: 12px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 10px; 
+            font-family: inherit; 
+            outline: none; 
+            background: rgba(255,255,255,0.05); 
+            color: white; 
+        }
+        
+        input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.4); }
+
+        input:focus { border-color: var(--accent-cyan); background: rgba(255,255,255,0.1); }
+
+        .btn-container { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+        button { padding: 12px 20px; cursor: pointer; border: none; border-radius: 10px; font-weight: 600; transition: 0.3s; }
+        
+        .btn-guardar { background: var(--accent-cyan); color: #0f172a; flex: 2; }
+        .btn-imprimir { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
+        .btn-borrar-todo { background: #7f1d1d; color: #fecaca; }
+
+        /* Tabla en Pantalla */
+        .table-container { border-radius: 15px; overflow: hidden; margin-top: 20px; border: 1px solid #e2e8f0; }
+        table { width: 100%; border-collapse: collapse; background: var(--deep-blue); color: white; }
+        th { background: #020617; color: var(--accent-cyan); padding: 15px; text-align: left; text-transform: uppercase; font-size: 11px; }
+        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
+        tbody tr:nth-child(odd) { background: var(--row-odd-ui); }
+
+        .btn-accion { padding: 6px 12px; font-size: 11px; border-radius: 6px; margin-right: 5px; cursor: pointer; }
+        .btn-editar { background: var(--accent-cyan); color: #0f172a; }
+        .btn-eliminar { background: #ef4444; color: white; }
+
+        /* --- CONFIGURACIÓN DE IMPRESIÓN SOLICITADA --- */
+        @media print {
+            .no-print, .btn-accion, th:last-child, td:last-child { display: none !important; }
+            body { background: white !important; padding: 0; margin: 0; }
+            .container { width: 100% !important; max-width: none !important; box-shadow: none !important; padding: 0 !important; }
+
+            table { 
+                width: 100% !important; 
+                border-collapse: collapse !important;
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important;
+            }
+
+            th { 
+                background-color: #000033 !important; 
+                color: #ffffff !important; 
+                padding: 12px !important;
+                border: 1px solid #000 !important;
+            }
+
+            tbody tr:nth-child(odd) { 
+                background-color: #004080 !important; 
+                color: #ffffff !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+
+            tbody tr:nth-child(even) { 
+                background-color: #f2f2f2 !important; 
+                color: #333333 !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+
+            td { padding: 10px !important; border: 1px solid #cccccc !important; color: inherit !important; }
+            h1 { color: #000033 !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Informe de Actividades</h1>
+    <h3 id="subtituloMes">Registro General - Gestión Profesional</h3>
+
+    <div class="no-print" id="panelFormulario">
+        <h2 id="tituloForm">❖ NUEVO REGISTRO</h2>
+        <div class="form-group">
+            <input type="hidden" id="idEdicion">
+            <input type="date" id="fecha">
+            <input type="text" id="actividad" placeholder="Nombre de la Actividad">
+            <input type="text" id="orador1" placeholder="Primer Orador">
+            <input type="text" id="orador2" placeholder="Segundo Orador">
+            <textarea id="mensajeOrador3" placeholder="Mensaje u observaciones del orador 3..." rows="2"></textarea>
+        </div>
+        <div class="btn-container">
+            <button class="btn-guardar" id="btnPrincipal" onclick="procesarRegistro()">REGISTRAR EN SISTEMA</button>
+            <button class="btn-imprimir" onclick="window.print()">🖨️ IMPRIMIR REPORTE</button>
+            <button class="btn-borrar-todo" onclick="borrarTodaLaBase()">BORRAR TODO</button>
+        </div>
+    </div>
+
+    <h2>Detalle de Registros</h2>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Actividad</th>
+                    <th>Orador 1</th>
+                    <th>Orador 2</th>
+                    <th>Mensaje</th>
+                    <th class="no-print">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaRegistros"></tbody>
+        </table>
+    </div>
+
+    <div class="seccion-texto" style="margin-top: 40px;">
+        <h2>Notas Adicionales</h2>
+        <div class="no-print" style="margin-bottom: 20px;">
+            <textarea id="nuevoTexto" placeholder="Escribe una nota importante aquí..." rows="2" style="width: 100%; box-sizing: border-box;"></textarea>
+            <button class="btn-guardar" style="width: auto; margin-top: 10px;" onclick="guardarTexto()">Guardar Nota</button>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Descripción de la Nota</th>
+                        <th class="no-print" style="width: 150px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpoTextos"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Tu Configuración Firebase (sin cambios)
+    const firebaseConfig = {
+        apiKey: "AIzaSyBCRAH-SDC4jbalRRUvNW9uSEDGbK1l1uE",
+        authDomain: "registro1-e8f9c.firebaseapp.com",
+        projectId: "registro1-e8f9c",
+        storageBucket: "registro1-e8f9c.firebasestorage.app",
+        messagingSenderId: "161696827076",
+        appId: "1:161696827076:web:f7052feb67ebf7270d2b91"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Lógica Firebase (sin cambios)
+    async function procesarRegistro() {
+        const id = document.getElementById('idEdicion').value;
+        const datos = {
+            fecha: document.getElementById('fecha').value,
+            actividad: document.getElementById('actividad').value,
+            orador1: document.getElementById('orador1').value,
+            orador2: document.getElementById('orador2').value,
+            mensajeOrador3: document.getElementById('mensajeOrador3').value
+        };
+        if(id) {
+            await db.collection("registros").doc(id).update(datos);
+            cancelarEdicion();
+        } else {
+            if(!datos.actividad) return;
+            await db.collection("registros").add(datos);
+        }
+        limpiarInputs();
+    }
+
+    db.collection("registros").onSnapshot(snap => {
+        const t = document.getElementById("tablaRegistros");
+        t.innerHTML = "";
+        snap.forEach(doc => {
+            const d = doc.data();
+            t.innerHTML += `<tr>
+                <td>${d.fecha}</td><td>${d.actividad}</td><td>${d.orador1}</td><td>${d.orador2}</td><td>${d.mensajeOrador3}</td>
+                <td class="no-print">
+                    <button class="btn-accion btn-editar" onclick="prepararEdicion('${doc.id}','${d.fecha}','${d.actividad}','${d.orador1}','${d.orador2}','${d.mensajeOrador3}')">Editar</button>
+                    <button class="btn-accion btn-eliminar" onclick="borrarDoc('registros','${doc.id}')">X</button>
+                </td>
+            </tr>`;
+        });
+    });
+
+    async function guardarTexto() {
+        const val = document.getElementById('nuevoTexto').value;
+        if(val) await db.collection("textos").add({ contenido: val });
+        document.getElementById('nuevoTexto').value = "";
+    }
+
+    db.collection("textos").onSnapshot(snap => {
+        const t = document.getElementById("cuerpoTextos");
+        t.innerHTML = "";
+        snap.forEach(doc => {
+            t.innerHTML += `<tr><td>${doc.data().contenido}</td>
+            <td class="no-print"><button class="btn-accion btn-eliminar" onclick="borrarDoc('textos','${doc.id}')">Eliminar</button></td></tr>`;
+        });
+    });
+
+    function prepararEdicion(id, f, a, o1, o2, m) {
+        document.getElementById('idEdicion').value = id;
+        document.getElementById('fecha').value = f;
+        document.getElementById('actividad').value = a;
+        document.getElementById('orador1').value = o1;
+        document.getElementById('orador2').value = o2;
+        document.getElementById('mensajeOrador3').value = m;
+        document.getElementById('panelFormulario').classList.add('modo-edicion');
+        document.getElementById('tituloForm').innerText = "✏️ EDITANDO REGISTRO";
+        document.getElementById('btnPrincipal').innerText = "GUARDAR CAMBIOS";
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    function cancelarEdicion() {
+        document.getElementById('idEdicion').value = "";
+        document.getElementById('panelFormulario').classList.remove('modo-edicion');
+        document.getElementById('tituloForm').innerText = "❖ NUEVO REGISTRO";
+        document.getElementById('btnPrincipal').innerText = "REGISTRAR EN SISTEMA";
+    }
+
+    async function borrarDoc(col, id) {
+        if(confirm("¿Eliminar?")) await db.collection(col).doc(id).delete();
+    }
+
+    async function borrarTodaLaBase() {
+        if(confirm("⚠️ ¿Borrar todo?")) {
+            const colRegistros = await db.collection("registros").get();
+            const colTextos = await db.collection("textos").get();
+            const batch = db.batch();
+            colRegistros.forEach(doc => batch.delete(doc.ref));
+            colTextos.forEach(doc => batch.delete(doc.ref));
+            await batch.commit();
+        }
+    }
+
+    function limpiarInputs() {
+        document.querySelectorAll('#panelFormulario input:not([type=hidden]), #panelFormulario textarea').forEach(i => i.value = "");
+    }
+</script>
+</body>
+</html>
